@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import logo from "./logo.svg";
-import "./App.css";
-import Form from "./Form";
+import logo from "./logo.svg"
+import "./App.css"
+import Form from "./Form"
+import Table from "./Table"
 
 class App extends Component {
   state = {
@@ -24,9 +25,10 @@ class App extends Component {
       <MuiThemeProvider>
       <div className="App">
         <Form onChange={fields => this.onChange(fields)} />
-        <p>
+        <Table/>
+        {/* <p>
           {JSON.stringify(this.state.fields, null, 2)}
-        </p>
+        </p> */}
       </div>
       </MuiThemeProvider>
     );
