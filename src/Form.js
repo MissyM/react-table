@@ -6,18 +6,35 @@ import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
 
 const styles = {
+  formStyles: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    textAlign: 'center'
+  },
   formContainer: {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'center',
+  },
+  contentFields: {
+    padding: '10px',
+    margin: '0px 10px',
   },
   typeIdSelect: {
     width: '50px',
-    marginBottom: '-5px'
+    marginBottom: '-5px',
+    fontSize: '13px'
   },
-  contentStyles:{
+  contentSelect:{
     width: '256px',
     display: 'inline-flex'
   },
+  btnContentStyles: {
+    display: 'flex',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  
 };
 
 export default class Form extends React.Component {
@@ -103,10 +120,10 @@ export default class Form extends React.Component {
 
   render() {
     return (
-      <form >
+      <form style={styles.formStyles}>
         <h1>DATOS DEL CLIENTE</h1>
         <div style={styles.formContainer}>
-          <div className="contentFields">
+          <div style={styles.contentFields}>
             <TextField
               name="fullName"
               hintText="Nombre Completo"
@@ -133,8 +150,8 @@ export default class Form extends React.Component {
               errorText={this.state.emailError}
             /><br />
           </div>
-          <div className="contentFields">
-            <div style={styles.contentStyles}>
+          <div style={styles.contentFields}>
+            <div style={styles.contentSelect}>
               <SelectField
                 name="typeId"
                 floatingLabelText="Doc "
@@ -175,8 +192,9 @@ export default class Form extends React.Component {
             /><br />
           </div>
         </div>
-        <RaisedButton label="Ingresar" primary={true} style={style} />
-        <button onClick={e => this.onSubmit(e)}>Ingresar</button>
+        <div style={styles.btnContentStyles}>
+          <RaisedButton label="Ingresar" primary onClick={this.onSubmit}/>
+        </div>
       </form>
     );
   }
