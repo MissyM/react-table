@@ -1,80 +1,182 @@
 import React from "react";
+import TextField from 'material-ui/TextField'
+
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
+import RaisedButton from 'material-ui/RaisedButton'
+
+const styles = {
+  formContainer: {
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  typeIdSelect: {
+    width: '50px',
+    marginBottom: '-5px'
+  },
+  contentStyles:{
+    width: '256px',
+    display: 'inline-flex'
+  },
+};
 
 export default class Form extends React.Component {
   state = {
-    firstName: "",
-    lastName: "",
-    username: "",
+    fullName: "",
+    //fullNameError: "",
+    phone: "",
+    //phoneError: "",
     email: "",
-    password: ""
+    emailError: "",
+    typeId: 1,
+    id: "",
+    idError: "",
+    password: "",
+    //passwordError: "",
+    confirmPassword: "",
+    //confirmPasswordError: ""
   };
 
   change = e => {
     this.props.onChange({ [e.target.name]: e.target.value });
     this.setState({
       [e.target.name]: e.target.value
-    });
-  };
+    })
+  }
+  
+  selectTypeIdChange = (e, idx, val) => {
+    this.props.onChange({ typeId: val });
+    this.setState({
+      typeId: val
+    })
+  }  
+  validate = () => {
+    let isError = false
+    const errors = {}
+
+    if (this.state.id.length <= 6) {
+      isError = true
+      errors.idError = "Debe tener mas de 6 dígitos" 
+    }
+
+    if (this.state.email.indexOf("@") === -1) {
+      isError = true
+      errors.emailError = "Se requiere un email valido"
+    }
+
+    if (isError) {
+      this.setState({
+        ...this.state,
+        ...errors
+      })
+    }
+
+    return isError
+  }
 
   onSubmit = e => {
     e.preventDefault();
     // this.props.onSubmit(this.state);
-    this.setState({
-      firstName: "",
-      lastName: "",
-      username: "",
-      email: "",
-      password: ""
-    });
-    this.props.onChange({
-      firstName: "",
-      lastName: "",
-      username: "",
-      email: "",
-      password: ""
-    });
+    const err = this.validate()
+    if (!err) {
+      //Limpia el formulario
+      this.setState({
+        fullName: "",
+        phone: "",
+        email: "",
+        typeId: 1,
+        id: "",
+        password: "",
+        confirmPassword: ""
+      });
+      this.props.onChange({
+        fullName: "",
+        phone: "",
+        email: "",
+        typeId: 1,
+        id: "",
+        password: "",
+        confirmPassword: ""
+      });
+    }
   };
 
   render() {
     return (
-      <form>
-        <input
-          name="firstName"
-          placeholder="First name"
-          value={this.state.firstName}
-          onChange={e => this.change(e)}
-        />
-        <br />
-        <input
-          name="lastName"
-          placeholder="Last name"
-          value={this.state.lastName}
-          onChange={e => this.change(e)}
-        />
-        <br />
-        <input
-          name="username"
-          placeholder="Username"
-          value={this.state.username}
-          onChange={e => this.change(e)}
-        />
-        <br />
-        <input
-          name="email"
-          placeholder="Email"
-          value={this.state.email}
-          onChange={e => this.change(e)}
-        />
-        <br />
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={this.state.password}
-          onChange={e => this.change(e)}
-        />
-        <br />
-        <button onClick={e => this.onSubmit(e)}>Submit</button>
+      <form >
+        <h1>DATOS DEL CLIENTE</h1>
+        <div style={styles.formContainer}>
+          <div className="contentFields">
+            <TextField
+              name="fullName"
+              hintText="Nombre Completo"
+              floatingLabelText="Nombres y Apellidos"
+              value={this.state.fullName}
+              onChange={this.change}
+              //errorText={this.state.fullNameError}
+            /><br />
+            <TextField
+              name="phone"
+              type='number'
+              hintText="Teléfono"
+              floatingLabelText="Número Telefónico"
+              value={this.state.phone}
+              onChange={this.change}
+              //errorText={this.state.phoneError}
+            /><br />
+            <TextField
+              name="email"
+              hintText="nombre@correo.com"
+              floatingLabelText="Email"
+              value={this.state.email}
+              onChange={this.change}
+              errorText={this.state.emailError}
+            /><br />
+          </div>
+          <div className="contentFields">
+            <div style={styles.contentStyles}>
+              <SelectField
+                name="typeId"
+                floatingLabelText="Doc "
+                value={this.state.typeId}
+                onChange={this.selectTypeIdChange}
+                style={styles.typeIdSelect}
+                >
+                <MenuItem value={1} primaryText="CC" />
+                <MenuItem value={2} primaryText="CE" />
+              </SelectField>
+              <TextField
+                name="id"
+                type='number'
+                hintText="Identificación"
+                floatingLabelText="Número"
+                value={this.state.id}
+                onChange={this.change}
+                errorText={this.state.idError}
+              />
+            </div><br />
+            <TextField
+              name="password"
+              type= 'password'
+              hintText="Más de cinco dígitos"
+              floatingLabelText="Contraseña"
+              value={this.state.password}
+              onChange={this.change}
+              //errorText={this.state.passwordError}
+            /><br />
+            <TextField
+              name="confirmPassword"
+              type= 'password'
+              hintText="Repita su contraseña"
+              floatingLabelText="Confirmar Contraseña"
+              value={this.state.confirmPassword}
+              onChange={this.change}
+              //errorText={this.state.confirmPasswordError}
+            /><br />
+          </div>
+        </div>
+        <RaisedButton label="Ingresar" primary={true} style={style} />
+        <button onClick={e => this.onSubmit(e)}>Ingresar</button>
       </form>
     );
   }
